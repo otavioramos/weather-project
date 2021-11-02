@@ -1,12 +1,13 @@
 const express = require("express");
 const https = require("https");
+require('dotenv').config();
 
 const app = express();
 
 
 app.get("/", (req, res) => {
     const city = "Sao Paulo"
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=8d729619f8e1c9e16ef07a4c9fe7b5e4&units=metric`;
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.OPENWEATHERTOKEN}&units=metric`;
     https.get(url,(response) => {
        response.on("data", (data) => {
             const weatherData = JSON.parse(data);
