@@ -4,12 +4,19 @@ require('dotenv').config();
 
 const app = express();
 
+app.use(express.urlencoded({ extended:true}));
+
 
 app.get("/", (req, res) => {
-    const city = "Sao Paulo"
+    res.sendFile(__dirname + "/index.html");
+});
+
+app.post("/", (req, res) => {
+    const city = req.body.cityName;
+    console.log(city);
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.OPENWEATHERTOKEN}&units=metric`;
     https.get(url,(response) => {
-       response.on("data", (data) => {
+        response.on("data", (data) => {
             const weatherData = JSON.parse(data);
             const temp = weatherData.main.temp;
             const description = weatherData.weather[0].description;
@@ -19,7 +26,7 @@ app.get("/", (req, res) => {
             res.write(`<h1>The temperature in ${city} is ${temp} degrees Celsius.</h1>`);
             res.write(`<img src="${imageUrl}" alt="weather-image">`);
             res.send();
-       });
+        });
     });
 });
 
